@@ -1,0 +1,55 @@
+global:
+  http_config:
+    proxy_url: 'http://proxy-internet-aws-china.xxx.net:3128'
+
+  resolve_timeout: 5m
+
+  smtp_smarthost: smtp.163.com:25 
+  smtp_from: onlinekof2001@163.com
+  smtp_auth_username: onlinekof2001@163.com
+  smtp_auth_password: xxxx
+
+route:
+  group_by: ['Basic','Shipxxx']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'Email to PASS'
+  routes:
+  - match_re: 
+      service: ^memb.*
+    receiver: 'PASS Wechat Alert'
+
+  - match_re:
+      service: ^ship.*
+    receiver: 'ShipHub Wechat Alert'
+
+receivers:
+- name: 'PASS Wechat Alert'
+  wechat_configs:
+    - send_resolved: true
+      api_secret: 'secret_keys'
+      api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+      corp_id: 'ww236950de4c3ce8dd'
+      agent_id: '1000002'
+      to_party: '2'                                            
+      to_user: '@all'
+
+- name: 'ShipHub Wechat Alert'
+  wechat_configs:
+    - send_resolved: true
+      api_secret: 'secret_keys'
+      api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+      corp_id: 'ww236950de4c3ce8dd'
+      agent_id: '1000002'
+      to_party: '3'
+      to_user: '@all'
+
+- name: 'Email to PASS'
+  email_configs:
+    - send_resolved: true
+      to: "onlinekof2001@163.com"
+
+
+templates:
+- '/etc/alertmanager/alertmanager.tmpl'

@@ -1,0 +1,32 @@
+{{ define "wechat.default.message" }}
+{{ if gt (len .Alerts.Firing) 0 }}
+
+========Firing Begin========
+
+PP Alerts Firing:
+{{ range .Alerts }}
+Alert Level: {{ .Labels.severity }}
+Alert Type: {{ .Labels.alertname }}
+Alert Host: {{ .Labels.instance }}
+Alert Desc: {{ .Annotations.summary }}
+Alert Time: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+
+========Firing End========
+{{- end }}
+{{- end }}
+
+{{ if gt (len .Alerts.Resolved) 0 }}
+=======Resolved Begin=======
+
+PP Alerts Resolved:
+{{ range .Alerts }}
+Alert Level: {{ .Labels.severity }}
+Alert Type: {{ .Labels.alertname }}
+Alert Host: {{ .Labels.instance }}
+Alert Desc: {{ .Annotations.summary }}
+Alert Time: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+
+=======Resolved End=======
+{{- end }}
+{{- end }}
+{{- end }}
